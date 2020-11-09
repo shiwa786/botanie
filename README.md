@@ -9,7 +9,7 @@ Can be found on telegram as [anierobot_bot](https://t.me/anierobot_bot).
 
 The Support group can be reached out to at [anie_support](https://t.me/anie_support), where you can ask for help about [anierobot_bot](https://t.me/anierobot_bot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
-Helper as at [Ash ketchum bot](https://github.com/darkpokefan/Ashketchum) 
+
 
 ## How to setup/deploy.
 
