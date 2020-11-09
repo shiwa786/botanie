@@ -1,5 +1,4 @@
 import importlib
-import html
 import time
 import re
 from sys import argv
@@ -60,7 +59,7 @@ You can find my list of available commands with /help.
 
 HELP_STRINGS = """
 Hey there! My name is *{}*.
-I'm a Hero For Fun and help admins manage their groups with One Punch! Have a look at the following for an idea of some of \
+I'm a Hero For Fun and help admins manage their groups with Aniebot Have a look at the following for an idea of some of \
 the things I can help you with.
 
 *Main* commands available:
@@ -78,7 +77,7 @@ And the following:
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-SAITAMA_IMG = "https://telegra.ph/file/46e6d9dfcb3eb9eae95d9.jpg"
+SAITAMA_IMG = "https://telegra.ph/file/863a3241604e433e8d71c.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Saitama is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
@@ -141,7 +140,6 @@ def send_help(chat_id, text, keyboard=None):
         chat_id=chat_id,
         text=text,
         parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True,
         reply_markup=keyboard)
 
 
@@ -161,16 +159,6 @@ def start(update: Update, context: CallbackContext):
         if len(args) >= 1:
             if args[0].lower() == "help":
                 send_help(update.effective_chat.id, HELP_STRINGS)
-            elif args[0].lower().startswith("ghelp_"):
-                mod = args[0].lower().split('_', 1)[1]
-                if not HELPABLE.get(mod, False):
-                    return
-                send_help(
-                    update.effective_chat.id, HELPABLE[mod].__help__,
-                    InlineKeyboardMarkup([[
-                        InlineKeyboardButton(
-                            text="Back", callback_data="help_back")
-                    ]]))
             elif args[0].lower() == "markdownhelp":
                 IMPORTED["extras"].markdown_help_sender(update)
             elif args[0].lower() == "disasters":
@@ -201,27 +189,27 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton(
-                            text="☑️ Add Saitama to your group",
+                            text="🤖Add Me To Your Group",
                             url="t.me/{}?startgroup=true".format(
                                 context.bot.username))
                     ],
                      [
                          InlineKeyboardButton(
-                             text="🚑 Support Group",
-                             url=f"https://t.me/{SUPPORT_CHAT}"),
+                             text="🔄Support Group",
+                             url=f"https://t.me/anie_support"),
                          InlineKeyboardButton(
-                             text="🔔 Updates Channel",
-                             url="https://t.me/OnePunchUpdates")
+                             text="🔄Updates Channel",
+                             url="https://t.me/anie_news")
                      ],
                      [
                          InlineKeyboardButton(
-                             text="🧾 Getting started guide",
-                             url="https://t.me/OnePunchUpdates/29")
+                             text="📖Getting started guide",
+                             url="https://t.me/anie_news/5")
                      ],
                      [
                          InlineKeyboardButton(
-                             text="🗄 Source code",
-                             url="https://github.com/AnimeKaizoku/SaitamaRobot")
+                             text="☑️source code",
+                             url="https://github.com/botanie/Anierobot_bot")
                      ]]))
     else:
         update.effective_message.reply_text(
@@ -321,17 +309,7 @@ def get_help(update: Update, context: CallbackContext):
 
     # ONLY send help in PM
     if chat.type != chat.PRIVATE:
-        if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
-            module = args[1].lower()
-            update.effective_message.reply_text(
-                f"Contact me in PM to get help of {module.capitalize()}",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(
-                        text="Help",
-                        url="t.me/{}?start=ghelp_{}".format(
-                            context.bot.username, module))
-                ]]))
-            return
+
         update.effective_message.reply_text(
             "Contact me in PM to get the list of possible commands.",
             reply_markup=InlineKeyboardMarkup([[
@@ -543,8 +521,7 @@ def main():
     start_handler = CommandHandler("start", start)
 
     help_handler = CommandHandler("help", get_help)
-    help_callback_handler = CallbackQueryHandler(
-        help_button, pattern=r"help_.*")
+    help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_")
 
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(
